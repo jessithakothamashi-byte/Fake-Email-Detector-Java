@@ -1,0 +1,108 @@
+```java
+import java.util.Scanner;
+
+public class FakeEmailDetector {
+
+    public static void checkEmail(String email) {
+
+        int riskScore = 0;
+
+        // Check basic email format
+        if (!email.contains("@") || !email.contains(".")) {
+            System.out.println("\n❌ Invalid Email Format");
+            return;
+        }
+
+        String lowerEmail = email.toLowerCase();
+
+        // Check suspicious words
+        String[] suspiciousWords = {
+            "verify",
+            "urgent",
+            "winner",
+            "prize",
+            "free",
+            "claim",
+            "account",
+            "password",
+            "login",
+            "offer"
+        };
+
+        for (String word : suspiciousWords) {
+            if (lowerEmail.contains(word)) {
+                riskScore += 2;
+            }
+        }
+
+        // Check suspicious domains
+        String[] suspiciousDomains = {
+            "tempmail",
+            "mailinator",
+            "10minutemail",
+            "fakeemail"
+        };
+
+        for (String domain : suspiciousDomains) {
+            if (lowerEmail.contains(domain)) {
+                riskScore += 3;
+            }
+        }
+
+        // Check excessive numbers
+        int numberCount = 0;
+
+        for (int i = 0; i < email.length(); i++) {
+            if (Character.isDigit(email.charAt(i))) {
+                numberCount++;
+            }
+        }
+
+        if (numberCount >= 5) {
+            riskScore += 2;
+        }
+
+        // Display result
+        System.out.println("\nEmail: " + email);
+        System.out.println("Risk Score: " + riskScore);
+
+        if (riskScore >= 5) {
+            System.out.println("🚨 Result: FAKE / HIGH RISK EMAIL");
+        }
+        else if (riskScore >= 2) {
+            System.out.println("⚠️ Result: SUSPICIOUS EMAIL");
+        }
+        else {
+            System.out.println("✅ Result: SAFE EMAIL");
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("=================================");
+        System.out.println("      FAKE EMAIL DETECTOR");
+        System.out.println("=================================");
+
+        System.out.print("Enter Email Address: ");
+
+        String email = sc.nextLine();
+
+        checkEmail(email);
+
+        sc.close();
+    }
+}
+```
+
+OUTPUT:
+=================================
+      FAKE EMAIL DETECTOR
+=================================
+
+Enter Email Address: verify.account@gmail.com
+
+Email: verify.account@gmail.com
+Risk Score: 4
+⚠️ Result: SUSPICIOUS EMAIL
